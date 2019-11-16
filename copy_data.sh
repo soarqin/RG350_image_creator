@@ -11,7 +11,7 @@ pushd "$(dirname $0)" >/dev/null
 source ./env.sh
 
 device=$(losetup -Pf --show "${filename}")
-yes | mkfs.ext4 ${device}p2
+yes | mkfs.ext4 -O uninit_bg,^64bit,^metadata_csum ${device}p2
 mkdir -p "${datadir}"
 mount -o noatime,nodiratime,rw ${device}p2 "${datadir}"
 
