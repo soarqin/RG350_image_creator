@@ -10,6 +10,8 @@ Before Use
   * `filename` is the raw image filename used for all scripts.
   * `part1_size` and `part2_size` are sizes for both partitions in MB.
 
+* All scripts must be run in `root`, just use `sudo`
+
 HOW-TO
 ======
 * create.sh
