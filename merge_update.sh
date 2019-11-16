@@ -31,7 +31,7 @@ sync
 rm -f "${bootdir}/zero.fill"
 sync
 
-umount -l "${bootdir}"
+umount "${bootdir}"
 rm -rf "${bootdir}" "${tmpdir}"
 losetup -d ${device}
 

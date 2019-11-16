@@ -20,7 +20,7 @@ mount -o noatime,nodiratime,rw ${device}p1 "${bootdir}"
 cp -Rf "./data/." "${bootdir}/"
 mkdir -p "${bootdir}/dev" "${bootdir}/root"
 
-umount -l "${bootdir}"
+umount "${bootdir}"
 rm -rf "${bootdir}"
 losetup -d ${device}
 

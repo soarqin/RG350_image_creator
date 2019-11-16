@@ -24,7 +24,8 @@ HOW-TO
 
 * copy_data.sh
 
-  Rebuild data partition with given data, need one argument:
+  Rebuild data partition with given data, need at least one argument, for every argument:
   * If it is an compressed file (like *.tar.gz or *.zip), the file will be decompressed to data partition with top directory stripped out.
   * If it is a folder, all files in the folder will be copied over.
+  * If it is an opk, it will be copied to `apps` folder in data partition.
   * If it is an old flashable raw image file, all files in data parition of the image will be copies over.

@@ -15,18 +15,28 @@ yes | mkfs.ext4 ${device}p2
 mkdir -p "${datadir}"
 mount -o noatime,nodiratime,rw ${device}p2 "${datadir}"
 
-if [[ -f "$1" ]]; then
-  if [[ $(file -b "$1") =~ compressed ]]; then
-    cat "$1" | bsdtar xf - -C "${datadir}" --strip-components=1
-  else
-    device_src=$(losetup -Pf --show "$1")
-    mkdir -p "${tmpdir}"
-    mount -o ro ${device_src}p2 "${tmpdir}"
-    cp -af "${tmpdir}/." "${datadir}/"
+for arg in "$@"; do
+  if [[ -f "${arg}" ]]; then
+    filetype=$(file -b "${arg}")
+    if [[ "$filetype" =~ compressed ]]; then
+      cat "${arg}" | bsdtar xf - -C "${datadir}" --strip-components=1
+    elif [[ "$filetype" =~ partition ]]; then
+      device_src=$(losetup -Pf --show "${arg}")
+      mkdir -p "${tmpdir}"
+      mount -o ro ${device_src}p2 "${tmpdir}"
+      cp -af "${tmpdir}/." "${datadir}/"
+      umount "${tmpdir}"
+      rm -rf "${tmpdir}"
+      losetup -d ${device_src}
+    elif [[ "$filetype" =~ Squashfs ]]; then
+      fn=$(basename ${arg})
+      cp -f "${arg}" "${datadir}/apps/${fn}"
+      chmod 0755 "${datadir}/apps/${fn}"
+    fi
+  elif [[ -d "${arg}" ]]; then
+    cp -af "${arg}/." "${datadir}/"
   fi
-elif [[ -d "$1" ]]; then
-  cp -af "$1/." "${datadir}/"
-fi
+done
 
 set +e
 # Zero fill disk buffers, to make better compression rates
@@ -37,13 +47,8 @@ sync
 rm -f "${datadir}/zero.fill"
 sync
 
-umount -l "${datadir}"
+umount "${datadir}"
 rm -rf "${datadir}"
 losetup -d ${device}
-if [[ -d "${tmpdir}" ]]; then
-  umount -l "${tmpdir}"
-  rm -rf "${tmpdir}"
-  losetup -d ${device_src}
-fi
 
 popd >/dev/null
