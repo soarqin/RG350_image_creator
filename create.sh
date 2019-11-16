@@ -11,7 +11,7 @@ echo 819200,,0x83
 echo write
 ) | sfdisk "${filename}"
 
-dd bs=512 seek=1 if=./data/boot.bin of="${filename}" conv=notrunc
+dd bs=512 seek=1 count=16 if=./data/boot.bin of="${filename}" conv=notrunc
 device=$(losetup -Pf --show "${filename}")
 yes | mkfs.vfat -F32 ${device}p1
 yes | mkfs.ext4 -O uninit_bg,^64bit,^metadata_csum ${device}p2
