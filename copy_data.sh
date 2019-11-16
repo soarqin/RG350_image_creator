@@ -39,6 +39,7 @@ for arg in "$@"; do
 done
 
 set +e
+rm -f "${datadir}/.partition_resized"
 # Zero fill disk buffers, to make better compression rates
 cat /dev/zero >"${datadir}/zero.fill" 2>/dev/null
 sync
