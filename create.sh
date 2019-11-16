@@ -14,7 +14,7 @@ echo write
 dd bs=512 seek=1 if=./data/boot.bin of="${filename}" conv=notrunc
 device=$(losetup -Pf --show "${filename}")
 yes | mkfs.vfat -F32 ${device}p1
-yes | mkfs.ext4 ${device}p2
+yes | mkfs.ext4 -O uninit_bg,^64bit,^metadata_csum ${device}p2
 
 mkdir -p "${bootdir}"
 mount -o noatime,nodiratime,rw ${device}p1 "${bootdir}"
