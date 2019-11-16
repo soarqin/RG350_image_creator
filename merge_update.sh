@@ -24,7 +24,7 @@ done
 
 set +e
 # Zero fill disk buffers, to make better compression rates
-cat /dev/zero >"${bootdir}/zero.fill"
+cat /dev/zero >"${bootdir}/zero.fill" 2>/dev/null
 sync
 sleep 1
 sync

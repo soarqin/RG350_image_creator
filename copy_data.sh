@@ -40,7 +40,7 @@ done
 
 set +e
 # Zero fill disk buffers, to make better compression rates
-cat /dev/zero >"${datadir}/zero.fill"
+cat /dev/zero >"${datadir}/zero.fill" 2>/dev/null
 sync
 sleep 1
 sync
