@@ -18,6 +18,7 @@ yes | mkfs.ext4 ${device}p2
 mkdir -p "${bootdir}"
 mount -o noatime,nodiratime,rw ${device}p1 "${bootdir}"
 cp -Rf "./data/." "${bootdir}/"
+mkdir -p "${bootdir}/dev" "${bootdir}/root"
 
 umount -l "${bootdir}"
 rm -rf "${bootdir}"
