@@ -3,7 +3,7 @@
 pushd "$(dirname $0)" >/dev/null
 source ./env.sh
 
-size=$(((${part1_size}+${part2_size})*1024*2+32))
+size=$((${part2_size}*1024*2+819200))
 
 dd if=/dev/zero of="${filename}" oflag=append bs=512 count=${size}
 (echo 32,819168,0xb
