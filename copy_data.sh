@@ -24,7 +24,7 @@ for arg in "$@"; do
       device_src=$(losetup -Pf --show "${arg}")
       mkdir -p "${tmpdir}"
       mount -o ro ${device_src}p2 "${tmpdir}"
-      cp -af "${tmpdir}/." "${datadir}/"
+      cp -Rf "${tmpdir}/." "${datadir}/"
       umount "${tmpdir}"
       rm -rf "${tmpdir}"
       losetup -d ${device_src}
@@ -34,7 +34,7 @@ for arg in "$@"; do
       chmod 0755 "${datadir}/apps/${fn}"
     fi
   elif [[ -d "${arg}" ]]; then
-    cp -af "${arg}/." "${datadir}/"
+    cp -Rf "${arg}/." "${datadir}/"
   fi
 done
 
