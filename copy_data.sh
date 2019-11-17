@@ -17,6 +17,7 @@ mount -o noatime,nodiratime,rw ${device}p2 "${datadir}"
 mkdir -p "${datadir}/local"
 
 # create a 512M swap file
+rm -f "${datadir}/local/swap.img"
 dd if=/dev/zero of="${datadir}/local/swap.img" bs=4M count=128
 chmod 0600 "${datadir}/local/swap.img"
 mkswap "${datadir}/local/swap.img"

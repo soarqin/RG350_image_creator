@@ -30,7 +30,8 @@ chmod +x output/flasher.sh
 echo "$DATE" > output/date.txt
 
 OPK_FILE=output/rg350-flasher-$DATE.opk
+rm -f "$OPK_FILE"
 mksquashfs output/default.gcw0.desktop src/opendingux.png output/flasher.sh src/pv src/dd output/date.txt \
-    "$1" $OPK_FILE -no-progress -noappend -comp gzip -all-root
+    "$1" "$OPK_FILE" -no-progress -noappend -comp gzip -all-root
 
 popd >/dev/null
