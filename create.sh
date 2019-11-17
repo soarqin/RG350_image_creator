@@ -3,7 +3,7 @@
 pushd "$(dirname $0)" >/dev/null
 source ./env.sh
 
-size=$((${part2_size}*1024*2+819200))
+size=$(((${part2_size}+512)*1024*2+819200))
 
 dd if=/dev/zero of="${filename}" oflag=append bs=512 count=${size}
 (echo 32,819168,0xb
@@ -21,7 +21,7 @@ mount -o noatime,nodiratime,rw ${device}p1 "${bootdir}"
 cp -Rf ./data/mininit-syspart*  "${bootdir}/"
 mkdir -p "${bootdir}/dev" "${bootdir}/root"
 
-umount "${bootdir}"
+umount -l "${bootdir}"
 rm -rf "${bootdir}"
 losetup -d ${device}
 

@@ -14,6 +14,12 @@ device=$(losetup -Pf --show "${filename}")
 yes | mkfs.ext4 -O uninit_bg,^64bit,^metadata_csum ${device}p2
 mkdir -p "${datadir}"
 mount -o noatime,nodiratime,rw ${device}p2 "${datadir}"
+mkdir -p "${datadir}/local"
+
+# create a 512M swap file
+dd if=/dev/zero of="${datadir}/local/swap.img" bs=4M count=128
+chmod 0600 "${datadir}/local/swap.img"
+mkswap "${datadir}/local/swap.img"
 
 for arg in "$@"; do
   if [[ -f "${arg}" ]]; then
@@ -25,7 +31,7 @@ for arg in "$@"; do
       mkdir -p "${tmpdir}"
       mount -o ro ${device_src}p2 "${tmpdir}"
       cp -Rf "${tmpdir}/." "${datadir}/"
-      umount "${tmpdir}"
+      umount -l "${tmpdir}"
       rm -rf "${tmpdir}"
       losetup -d ${device_src}
     elif [[ "$filetype" =~ Squashfs ]]; then
@@ -48,7 +54,7 @@ sync
 rm -f "${datadir}/zero.fill"
 sync
 
-umount "${datadir}"
+umount -l "${datadir}"
 rm -rf "${datadir}"
 losetup -d ${device}
 

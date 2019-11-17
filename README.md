@@ -8,7 +8,7 @@ Before Use
 
   this file includes environment settings:
   * `filename` is the raw image filename used for all scripts.
-  * `part1_size` and `part2_size` are sizes for both partitions in MB.
+  * `part2_size` is the size for both partitions in MB, an extra 512MB will be added for swap use.
 
 * All scripts must be run in `root`, just use `sudo`
 
