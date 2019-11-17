@@ -30,6 +30,9 @@ while [ `/bin/mount | grep mmcblk0p2 | wc -l` -gt 0 -a $n -gt 0 ]; do
   let n=$n-1
   sleep 1
 done
+if [ $n -eq 0 ]; then
+  exit 1
+fi
 
 (./pv -n __FILENAMEHOLDER__ | ./dd of=/dev/mmcblk0 oflag=sync bs=4M conv=notrunc,noerror) 2>&1 | dialog --gauge "Flashing, please wait..." 7 48 0
 sync /dev/mmcblk0
