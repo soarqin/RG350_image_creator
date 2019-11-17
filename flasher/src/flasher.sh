@@ -11,11 +11,17 @@ you perform the flash.
 
 Do you want to flash now?"
 
+if [ -f "date.txt" ] ; then
+	DATE="`cat date.txt`"
+	export DIALOGOPTS="--colors --backtitle \"OpenDingux MMC flasher $DATE\""
+fi
+
 dialog --defaultno --yes-label 'Flash' --no-label 'Cancel' --yesno "$DISCLAIMER" 15 48
 if [ $? -eq 1 ] ; then
   exit 1
 fi
 
+/sbin/swapoff -a
 /bin/umount /dev/mmcblk0p2 1>/dev/null 2>&1
 let n=5
 while [ `/bin/mount | grep mmcblk0p2 | wc -l` -gt 0 -a $n -gt 0 ]; do
@@ -25,7 +31,7 @@ while [ `/bin/mount | grep mmcblk0p2 | wc -l` -gt 0 -a $n -gt 0 ]; do
   sleep 1
 done
 
-(./pv -n __FILENAMEHOLDER__ | ./dd of=/dev/mmcblk0 oflag=sync bs=4M conv=notrunc,noerror) 2>&1 | dialog --gauge "Flashing, please wait..." 7 34 0
+(./pv -n __FILENAMEHOLDER__ | ./dd of=/dev/mmcblk0 oflag=sync bs=4M conv=notrunc,noerror) 2>&1 | dialog --gauge "Flashing, please wait..." 7 48 0
 sync /dev/mmcblk0
 
 dialog --msgbox '\n      Flash complete!\n\nThe system will now restart.\n\n' 8 0
